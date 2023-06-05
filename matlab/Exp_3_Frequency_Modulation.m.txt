@@ -1,0 +1,49 @@
+clc;
+clear all;
+close all;
+
+L = 10000;
+fs=1000;
+t = (0:L-1)/fs;
+
+% Message signal
+Am = 1;%Message Signal Amplitude
+fm = 1;%Message Signal Frequency
+m_t = Am * cos(2 * pi * fm * t);
+subplot(411);
+plot(t,m_t,'m')
+xlabel('Time');
+ylabel('Amplitude');
+title('Message Signal');
+
+% Carrier Signal
+Ac = 0.01;%Carrier Signal Amplitude
+fc = 10;%Carrier Signal Frequency
+fs=10000;%sample frequency
+subplot(412);
+c_t = Ac * cos(2 * pi * fc * t);
+plot(t, c_t,'k')
+xlabel('Time');
+ylabel('Amplitude');
+title('Carrier Signal');
+
+% frequency modulated signal
+K_ = 5;%modulaion index
+s_t = Ac * sin(2 * pi * fc * t + K_ * sin(2 * pi * fm * t));
+subplot(413)
+plot(t, s_t,'b')
+xlabel('Time');
+ylabel('Amplitude');
+title('Modulated Signal');
+
+% frequency demodulation
+x = abs([diff(s_t) 0]);
+[b, a] = butter(7,0.01);
+fr1 = filter(b,a,x);
+fr1=fr1*10^4;
+%fr1= fmdemod(s_t,fc,fs,5);
+subplot(414)
+plot(t, fr1,'r')
+xlabel('Time');
+ylabel('Amplitude');
+title('DeModulated Signal');

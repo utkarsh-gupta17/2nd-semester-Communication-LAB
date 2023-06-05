@@ -1,0 +1,43 @@
+clc;
+close all;
+clear all;
+
+fs=1500; %Sampling Frequency
+f0=150;
+w=0.005;
+
+%Carrier Signal
+x=pulstran(0:1/fs:1, 0:1/f0:1, "rectpuls",w);
+t=0:1/fs:1;
+subplot(412);
+plot(t,x,'b');
+xlabel('time');
+ylabel('amplitude');
+title('Carrier Signal')
+
+%Message Signal
+y=5*sin(2*pi*2*t);
+subplot(411);
+plot(t,y,'r');
+xlabel('time');
+ylabel('amplitude');
+title('Message Signal')
+
+%PAM Signal
+pam=x.*y;
+subplot(413);
+plot(t,pam,'k');
+xlabel('time');
+ylabel('amplitude');
+title('PAM Signal')
+
+%PAM Demodulation
+[b,a]=butter(5,0.02);
+s1=filter(b,a,pam);
+subplot(414);
+plot(t,s1,'m');
+xlabel('time');
+ylabel('amplitude');
+title('DeModulated Signal')
+
+

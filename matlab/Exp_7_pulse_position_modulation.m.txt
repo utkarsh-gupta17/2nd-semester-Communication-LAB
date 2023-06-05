@@ -1,0 +1,42 @@
+clc;
+close all;
+clear all;
+
+% Signal parameters
+fc = 100;          % Carrier frequency
+fs = 1000;         % Sampling frequency
+tb = 1/fs;         % Bit time
+t = 0:tb:1-tb;     % Time vector
+
+% Message signal
+msg = sin(2*pi*10*t); % Sine wave input signal
+subplot(311);
+plot(t,msg,'m');
+xlabel('Time (s)');
+ylabel('Amplitude');
+title('Message Signal');
+
+% PPM modulation
+ppm_signal = zeros(1,length(t));
+for i = 1:length(msg)
+    if msg(i) > 0
+        ppm_signal((i-1)*fs*tb+1:i*fs*tb) = fc;
+    end
+end
+
+% Plot PPM modulated signal
+subplot(312);
+plot(t,ppm_signal,'b');
+xlabel('Time (s)');
+ylabel('Amplitude');
+title('PPM Modulated Signal with Sine Input');
+
+
+ppm_demod=demod(ppm_signal,fc,fs,'ppm');
+
+% Plot demodulated signal
+subplot(313);
+plot(t,msg-ppm_demod,'k');
+xlabel('Time (s)');
+ylabel('Amplitude');
+title('Demodulated Signal with Sine Input');

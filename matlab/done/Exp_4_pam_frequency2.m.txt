@@ -1,0 +1,32 @@
+a_m=input("Enter a_m :");
+a_c=input("Enter a_c :");
+f_m=input("Enter f_m :");
+f_c=input("Enter f_c :");
+b=input("Enter b :");
+
+t=1:0.01:10;
+pi=3.14;
+m_t=a_m*cos(2*pi*f_m.*t);
+c_t=a_c*cos(2*pi*f_c.*t);
+f=a_c*cos(2*pi*f_c.*t+b*sin(2*pi*f_m.*t));
+
+y=diff(f);
+fmod=abs(y);
+[b,a]=butter(10,0.056);
+s1=filter(b,a,fmod);
+
+subplot(3,1,1);
+plot(m_t);
+title("Message Signal");
+xlabel("time");
+ylabel("magnitude");
+subplot(3,1,2);
+plot(t,f);
+title("AM modulated signal");
+xlabel("time");
+ylabel("magnitude");
+subplot(3,1,3);
+plot(s1);
+title("Demodulated signal");
+xlabel("time");
+ylabel("magnitude");
